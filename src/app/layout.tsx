@@ -4,6 +4,7 @@ import { useState } from "react";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from "@trpc/react-query";
 import { trpc } from '@/lib/trpc';
+import { ThemeProvider } from "@/providers/theme-provider";
 
 export default function RootLayout({
   children,
@@ -27,7 +28,14 @@ export default function RootLayout({
       <body>
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
-            {children}
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
           </QueryClientProvider>
         </trpc.Provider>
       </body>
