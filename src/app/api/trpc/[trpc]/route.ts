@@ -1,6 +1,6 @@
 // src/app/api/trpc/[trpc]/route.ts
-import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { appRouter } from '@/server/trpc';
+import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 
 export const GET = (req: Request) =>
   fetchRequestHandler({

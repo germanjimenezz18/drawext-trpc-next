@@ -1,9 +1,5 @@
 "use client";
-import { Suspense } from "react";
-import { Tldraw } from "tldraw";
-import { ApiKeyForm } from "@/components/api-key-form";
-import { useOpenAIKey } from "@/hooks/useOpenAIKey";
-import { LoadingApiKey } from "@/components/loading-api-key";
+import { Tldraw, useEditor } from "tldraw";
 
 import {
   Card,
@@ -12,102 +8,76 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Chat } from "@/components/chat";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-import { Separator } from "@/components/ui/separator";
+import { TLUiComponents } from 'tldraw'
+import 'tldraw/tldraw.css'
 import { Button } from "@/components/ui/button";
-import { GlassesIcon, Settings } from "lucide-react";
+import { useDrawingEditor } from "@/hooks/useDrawingEditor";
 
 export default function Home() {
-  const { apiKey, isLoading, saveApiKey, removeApiKey } = useOpenAIKey();
+  const { setEditor } = useDrawingEditor();
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-r from-indigo-200 to-yellow-100">
-      <header className="flex justify-center  items-center w-full border  pt-2">
-        <div className=" mx-auto p-3 rounded-3xl bg-white/30 border-[white]/20 ">
-          <h1 className="text-pretty bg-[#f9fafb] rounded-xl px-2 py-2 font-medium ">
-            Drawext
-          </h1>
-        </div>
-        <nav className="w-full flex justify-between items-center gap-x-2 px-2">
-          <div className="flex items-center gap-2"></div>
-        </nav>
+    <div className="flex flex-col h-screen bg-gradient-to-br from-indigo-200  to-indigo-400">
+      <header className="flex justify-between w-full items-center pt-2 px-4">
+        <h1 className="flex items-center gap-x-1  rounded-2xl px-2 py-1 select-none tracking-wide ">
+        </h1>
       </header>
-      <main className="grid flex-1 grid-cols-[minmax(300px,400px)_1fr] gap-6 p-4 1 overflow-hidden ">
-        <Card className="h-full p-3 rounded-3xl bg-white/30 border-[white]/20 ">
-          <div className="bg-[#f9fafb] h-full rounded-xl border shadow-lg flex flex-col">
-            <CardHeader>
+      <main className="grid flex-1 grid-cols-[minmax(300px,400px)_1fr] xl:grid-cols-[minmax(400px,500px)_1fr] gap-8 p-8 overflow-hidden ">
+        <Card className="h-full p-2 rounded-3xl bg-white/30 border-[white]/20 ">
+          <div className="bg-[#f9fafb] h-full rounded-2xl  flex flex-col">
+            <CardHeader className="select-none" >
               <CardTitle>IA analysis</CardTitle>
               <CardDescription>
                 Get AI analysis of your drawings, enhance your creativity and
                 get insights.
               </CardDescription>
-              <Separator className="my-4" />
             </CardHeader>
-
             <CardContent className="flex-1">
-              <Suspense fallback={<LoadingApiKey />}>
-                {isLoading ? (
-                  <LoadingApiKey />
-                ) : !apiKey ? (
-                  <ApiKeyForm onSave={saveApiKey} />
-                ) : (
-                  <div className="flex flex-col h-full space-y-4">
-                    {/* ia chat */}
-
-                    <div className=" border p-2 h-full rounded-md bg-secondary">
-                      <div className="flex flex-col h-full">
-                        <div className="flex-1 overflow-y-auto">
-                          <div className="flex flex-col gap-2">hello</div>
-                        </div>
-                        <div className="flex flex-row gap-2">
-                          <Button variant={"default"} size="sm">
-                            <GlassesIcon /> Analize my draw
-                          </Button>
-
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="default" size="sm">
-                                <Settings />
-                                <span className="sr-only">Settings</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                              side="top"
-                              align="end"
-                              className="z-[1000]"
-                            >
-                              <DropdownMenuItem onClick={removeApiKey}>
-                                <Button  size="sm">
-                                  Remove API Key
-                                </Button>
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </Suspense>
+              <Chat />
             </CardContent>
           </div>
         </Card>
 
-        <Card className="h-full p-3 rounded-3xl bg-white/30 border-[white]/20 border">
+        <Card className="h-full p-2 rounded-3xl bg-white/30 border-[white]/20 border ">
           <Tldraw
-            persistenceKey="asdf"
+            persistenceKey="test"
             autoFocus={true}
-            className="shadow-lg rounded-xl border"
+            className=" rounded-2xl"
+            components={components}
+            onMount={(editor) => {
+              setEditor(editor);
+            }}
           />
         </Card>
       </main>
     </div>
   );
+}
+
+
+function ExportCanvasButton() {
+  const editor = useEditor()
+  return (
+    <Button
+      style={{ pointerEvents: 'all', fontSize: 18, backgroundColor: 'thistle' }}
+      onClick={async () => {
+        const shapeIds = editor.getCurrentPageShapeIds()
+        if (shapeIds.size === 0) return alert('No shapes on the canvas')
+        const { blob } = await editor.toImage(Array.from(shapeIds), { format: 'png', background: false })
+
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob)
+        link.download = 'every-shape-on-the-canvas.jpg'
+        link.click()
+        URL.revokeObjectURL(link.href)
+      }}
+    >
+      Export canvas as image
+    </Button>
+  )
+}
+const components: TLUiComponents = {
+  SharePanel: ExportCanvasButton,
 }
