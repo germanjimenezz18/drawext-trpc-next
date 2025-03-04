@@ -93,11 +93,11 @@ export function Chat() {
           </div>
           <div className="flex flex-row gap-2 border-t pt-2">
             <Button
-              variant="outline"
+              variant="indigo"
               onClick={handleAnalyze}
               disabled={!apiKey || mutation.isLoading}
             >
-              <GlassesIcon className="mr-2" />
+              <GlassesIcon />
               {mutation.isLoading ? "Analyzing..." : "Analyze my draw"}
             </Button>
 

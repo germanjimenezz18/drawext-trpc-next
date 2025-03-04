@@ -16,8 +16,8 @@ export function ChatLoadKeySkeleton() {
                         </div>
                     </div>
                     <div className="flex flex-row gap-2 border-t pt-2">
-                        <Button variant={"outline"}>
-                            <Loader className="animate-spin" /> Analize my draw
+                        <Button variant={"indigo"}>
+                            <Loader className="animate-spin" /> Analyze my draw
                         </Button>
                         <Button variant="outline">
                             <Settings />
@@ -48,7 +48,7 @@ export function ChatPrompSkeleton() {
                         <Button variant={"outline"}>
                             <Loader className="animate-spin" /> Analize my draw
                         </Button>
-                        <Button variant="outline">
+                        <Button variant="indigo">
                             <Settings />
                         </Button>
                     </div>

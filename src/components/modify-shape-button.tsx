@@ -1,6 +1,7 @@
 import { useEditor } from "tldraw";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
+import { SplineIcon } from "lucide-react";
 
 export default function ModifyShapeButton() {
   const editor = useEditor();
@@ -14,10 +15,11 @@ export default function ModifyShapeButton() {
   };
   return (
     <Button
-      className="pointer-events-auto font-bold bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-2 py-1 rounded-md"
+      variant={"indigo"}
+      className="pointer-events-auto mr-2 my-2 rounded-xl drop-shadow-md`"
       onClick={handleModifyShapes}
     >
-      Modify shape
+     <SplineIcon/> Modify shape
     </Button>
   );
 }

@@ -1,5 +1,3 @@
-"use client";
-import { debounce, Editor, Tldraw } from "tldraw";
 import {
   Card,
   CardContent,
@@ -8,41 +6,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Chat } from "@/components/chat";
-
-import "tldraw/tldraw.css";
-import { TLUiComponents } from "tldraw";
-import { useDrawingEditor } from "@/hooks/useDrawingEditor";
 import { Navbar } from "@/components/navbar";
-import { useDocumentSync } from "@/hooks/useDocumentSync";
-import { toast } from "sonner";
-import ModifyShapeButton from "@/components/modify-shape-button";
+import TldrawCanvas from '../components/tldraw-canvas';
 
-const components: TLUiComponents = {
-  SharePanel: ModifyShapeButton,
-};
 
 export default function Home() {
-  const { setEditor } = useDrawingEditor();
-  const { handleDocumentChange } = useDocumentSync();
-
-  const debouncedHandleDocumentChange = debounce((editor: Editor) => {
-    handleDocumentChange(editor);
-  }, 800);
-
-  const handleTldrawMount = (editor: Editor) => {
-    // Set Global editor instance for use in other components
-    setEditor(editor);
-    toast.success("Editor mounted");
-    // Also register change handler
-    editor.sideEffects.registerAfterChangeHandler("shape", () => {
-      debouncedHandleDocumentChange(editor);
-    });
-
-    editor.sideEffects.registerAfterDeleteHandler("shape", () => {
-      debouncedHandleDocumentChange(editor);
-    });
-  };
-
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-indigo-200  to-indigo-400">
       <header className="flex w-full items-center py-2.5 px-10 bg-[#f9fafb] bg-white/30 border-[white]/20">
@@ -70,13 +38,7 @@ export default function Home() {
         </Card>
 
         <Card className="h-full p-2 rounded-3xl bg-white/30 border-[white]/20 border ">
-          <Tldraw
-            // persistenceKey="test"
-            autoFocus={true}
-            className=" rounded-2xl"
-            components={components}
-            onMount={(editor) => handleTldrawMount(editor)}
-          />
+          <TldrawCanvas/>
         </Card>
       </main>
     </div>

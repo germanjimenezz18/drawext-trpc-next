@@ -6,10 +6,16 @@ export function Navbar() {
     <div className="flex w-full items-center justify-between">
       <div className="flex items-center gap-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold">DrawExt</span>
-          <span className="rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-800 px-2 py-1 text-xs text-white">
-            Beta
-          </span>
+          <button className="group relative  rounded-lg border border-neutral-200 bg-gradient-to-r from-indigo-500 to-indigo-800 px-4 py-1 text-white">
+            <span className="relative inline-flex overflow-hidden">
+              <div className="translate-y-0 skew-y-0 transition duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-12">
+                DrawExt
+              </div>
+              <div className="absolute translate-y-[110%] skew-y-12 transition duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
+                DrawExt
+              </div>
+            </span>
+          </button>
         </Link>
         <nav className="hidden gap-6 md:flex">
           <Link

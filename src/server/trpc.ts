@@ -4,6 +4,8 @@ import { z } from "zod";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
 import { sleep } from "@/lib/utils";
+import { TLStoreSnapshot } from "tldraw";
+import * as fs from "fs";
 
 const t = initTRPC.create();
 
@@ -48,16 +50,30 @@ export const appRouter = router({
     }),
 
   saveDocument: publicProcedure
-    .input(z.object({ document: z.string() }))
+    .input(
+      z.object({
+        document: z.custom<TLStoreSnapshot>(),
+      })
+    )
     .mutation(async ({ input }) => {
-      await sleep(1500);
-      console.log(input.document);
+      // TODO: save in DB
+      fs.writeFileSync("mock-db.json", JSON.stringify(input.document, null, 2));
+      await sleep(1500); // Simular latencia
+
+      console.log(input);
       return { success: true };
     }),
 
-  getDocument: publicProcedure.mutation(async () => {
-    await sleep(1500);
-    return { success: true };
+  getDocument: publicProcedure.query(async () => {
+    // TODO: read from DB
+    const data = fs.readFileSync("mock-db.json", "utf8");
+    await sleep(1500); // Simular latencia
+    return {
+      success: true,
+      document: {
+        content: data,
+      },
+    };
   }),
 });
 

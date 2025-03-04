@@ -10,7 +10,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Toaster position="top-right" richColors theme="light" />
+        <Toaster
+          position="top-right"
+          richColors
+          theme="light"
+          toastOptions={{ duration: 2500 }}
+        />
         <TRPCProvider>{children}</TRPCProvider>
       </body>
     </html>
