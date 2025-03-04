@@ -1,6 +1,5 @@
 "use client";
-import { Tldraw, useEditor } from "tldraw";
-
+import { debounce, Editor, Tldraw } from "tldraw";
 import {
   Card,
   CardContent,
@@ -10,25 +9,55 @@ import {
 } from "@/components/ui/card";
 import { Chat } from "@/components/chat";
 
-import { TLUiComponents } from 'tldraw'
-import 'tldraw/tldraw.css'
-import { Button } from "@/components/ui/button";
+import "tldraw/tldraw.css";
+import { TLUiComponents } from "tldraw";
 import { useDrawingEditor } from "@/hooks/useDrawingEditor";
+import { Navbar } from "@/components/navbar";
+import { useDocumentSync } from "@/hooks/useDocumentSync";
+import { toast } from "sonner";
+import ModifyShapeButton from "@/components/modify-shape-button";
+
+const components: TLUiComponents = {
+  SharePanel: ModifyShapeButton,
+};
 
 export default function Home() {
   const { setEditor } = useDrawingEditor();
+  const { handleDocumentChange } = useDocumentSync();
+
+  const debouncedHandleDocumentChange = debounce((editor: Editor) => {
+    handleDocumentChange(editor);
+  }, 800);
+
+  const handleTldrawMount = (editor: Editor) => {
+    // Set Global editor instance for use in other components
+    setEditor(editor);
+    toast.success("Editor mounted");
+    // Also register change handler
+    editor.sideEffects.registerAfterChangeHandler("shape", () => {
+      debouncedHandleDocumentChange(editor);
+    });
+
+    editor.sideEffects.registerAfterDeleteHandler("shape", () => {
+      debouncedHandleDocumentChange(editor);
+    });
+  };
 
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-indigo-200  to-indigo-400">
-      <header className="flex justify-between w-full items-center pt-2 px-4">
-        <h1 className="flex items-center gap-x-1  rounded-2xl px-2 py-1 select-none tracking-wide ">
-        </h1>
+      <header className="flex w-full items-center py-2.5 px-10 bg-[#f9fafb] bg-white/30 border-[white]/20">
+        <Navbar />
       </header>
-      <main className="grid flex-1 grid-cols-[minmax(300px,400px)_1fr] xl:grid-cols-[minmax(400px,500px)_1fr] gap-8 p-8 overflow-hidden ">
+      <main className="grid flex-1 grid-cols-1 md:grid-cols-[minmax(300px,400px)_1fr] xl:grid-cols-[minmax(400px,500px)_1fr] gap-8 p-4 md:p-8 overflow-hidden ">
         <Card className="h-full p-2 rounded-3xl bg-white/30 border-[white]/20 ">
           <div className="bg-[#f9fafb] h-full rounded-2xl  flex flex-col">
-            <CardHeader className="select-none" >
-              <CardTitle>IA analysis</CardTitle>
+            <CardHeader className="select-none">
+              <CardTitle>
+                <span className="inline-block bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-2 py-1 rounded-md">
+                  AI
+                </span>{" "}
+                Analyzer
+              </CardTitle>
               <CardDescription>
                 Get AI analysis of your drawings, enhance your creativity and
                 get insights.
@@ -42,42 +71,14 @@ export default function Home() {
 
         <Card className="h-full p-2 rounded-3xl bg-white/30 border-[white]/20 border ">
           <Tldraw
-            persistenceKey="test"
+            // persistenceKey="test"
             autoFocus={true}
             className=" rounded-2xl"
             components={components}
-            onMount={(editor) => {
-              setEditor(editor);
-            }}
+            onMount={(editor) => handleTldrawMount(editor)}
           />
         </Card>
       </main>
     </div>
   );
-}
-
-
-function ExportCanvasButton() {
-  const editor = useEditor()
-  return (
-    <Button
-      style={{ pointerEvents: 'all', fontSize: 18, backgroundColor: 'thistle' }}
-      onClick={async () => {
-        const shapeIds = editor.getCurrentPageShapeIds()
-        if (shapeIds.size === 0) return alert('No shapes on the canvas')
-        const { blob } = await editor.toImage(Array.from(shapeIds), { format: 'png', background: false })
-
-        const link = document.createElement('a')
-        link.href = URL.createObjectURL(blob)
-        link.download = 'every-shape-on-the-canvas.jpg'
-        link.click()
-        URL.revokeObjectURL(link.href)
-      }}
-    >
-      Export canvas as image
-    </Button>
-  )
-}
-const components: TLUiComponents = {
-  SharePanel: ExportCanvasButton,
 }
