@@ -20,10 +20,10 @@ export function Navbar() {
         <nav className="hidden gap-6 md:flex">
           
           <Link
-            href="/docs"
+            href="/settings"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
           >
-            Documentation
+            Settings
           </Link>
         </nav>
       </div>

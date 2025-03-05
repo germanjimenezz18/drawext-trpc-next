@@ -10,12 +10,9 @@ export function ApiKeyForm({ onSave }: ApiKeyFormProps) {
   const [key, setKey] = useState('');
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 rounded-xl p-4 border">
       <div className="space-y-2">
         <h3 className="text-sm font-medium">OpenAI API Key Required</h3>
-        <p className="text-sm text-muted-foreground">
-          Please enter your OpenAI API key to enable AI analysis
-        </p>
       </div>
       <div className="flex gap-2">
         <Input

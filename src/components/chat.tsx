@@ -1,12 +1,5 @@
 "use client";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
-import { ApiKeyForm } from "@/components/api-key-form";
 import { useOpenAIKey } from "@/hooks/useOpenAIKey";
 import { useDrawingEditor } from "@/hooks/useEditorStore";
 
@@ -15,14 +8,10 @@ import { GlassesIcon, Settings } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { ChatLoadKeySkeleton, ChatPrompSkeleton } from "./skeletons";
 import { toast } from "sonner";
+import Link from "next/link";
 
 export function Chat() {
-  const {
-    apiKey,
-    isLoading: keyIsLoading,
-    saveApiKey,
-    removeApiKey,
-  } = useOpenAIKey();
+  const { apiKey, isLoading: keyIsLoading } = useOpenAIKey();
   const { getImage } = useDrawingEditor();
 
   const mutation = trpc.completion.useMutation({
@@ -64,8 +53,13 @@ export function Chat() {
         <div className="flex flex-col h-full">
           <div className="flex-1 overflow-y-auto p-4">
             {!apiKey ? (
-              <div className="space-y-4">
-                <ApiKeyForm onSave={saveApiKey} />
+              <div className="h-full flex flex-col gap-2 items-center justify-center">
+                <span>No OpenAI API key set</span>
+                <Link href={"/settings"}>
+                  <Button variant="outline">
+                    <Settings /> Go to settings
+                  </Button>
+                </Link>
               </div>
             ) : mutation.data ? (
               <div className="flex flex-col gap-4">
@@ -93,31 +87,20 @@ export function Chat() {
           </div>
           <div className="flex flex-row gap-2 border-t pt-2">
             <Button
-              variant="indigo" 
+              variant="indigo"
               onClick={handleAnalyze}
               disabled={!apiKey || mutation.isLoading}
             >
-              <GlassesIcon  />
+              <GlassesIcon />
               {mutation.isLoading ? "Analyzing..." : "Analyze my draw"}
             </Button>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" disabled={!apiKey}>
-                  <Settings />
-                  <span className="sr-only">Settings</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="top"
-                align="end"
-                className="z-[1000] bg-transparent shadow-none"
-              >
-                <DropdownMenuItem onClick={removeApiKey}>
-                  <Button size="default">Remove API Key</Button>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Link href={"/settings"}>
+              <Button variant="outline" disabled={!apiKey}>
+                <Settings />
+                <span className="sr-only">Settings</span>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
