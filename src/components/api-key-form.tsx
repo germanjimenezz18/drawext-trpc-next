@@ -12,7 +12,7 @@ export function ApiKeyForm({ onSave }: ApiKeyFormProps) {
   return (
     <div className="space-y-4 rounded-xl p-4 border">
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">OpenAI API Key Required</h3>
+        <h3 className="text-sm font-medium">API Key Required</h3>
       </div>
       <div className="flex gap-2">
         <Input

@@ -1,4 +1,3 @@
-import { Settings } from "lucide-react";
 import Link from "next/link";
 
 export function Navbar() {
@@ -6,7 +5,7 @@ export function Navbar() {
     <div className="flex w-full items-center justify-between">
       <div className="flex items-center gap-6">
         <Link href="/" className="flex items-center gap-2">
-          <button className="group relative shadow-xl rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-1 text-white ">
+          <button className="group relative drop-shadow-lg rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-1 text-white ">
             <span className="relative inline-flex overflow-hidden">
               <div className="translate-y-0 skew-y-0 transition duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-12">
                 DrawExt
@@ -26,9 +25,6 @@ export function Navbar() {
             Settings
           </Link>
         </nav>
-      </div>
-      <div className="flex items-center gap-2">
-        <Settings></Settings>
       </div>
     </div>
   );

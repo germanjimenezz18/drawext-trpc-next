@@ -22,9 +22,9 @@ export const useDocumentSync = () => {
       const { document } = getSnapshot(editor.store);
 
       toast.promise(saveDocument({ document }), {
-        loading: "Saving...",
-        success: "Document saved",
-        error: "Error saving",
+        loading: "Saving document...",
+        success: "Saved successfully",
+        error: "Save failed",
       });
     } catch (error) {
       console.error("Error saving document:", error);
