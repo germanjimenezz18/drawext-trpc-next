@@ -45,7 +45,7 @@ export function ChatPrompSkeleton() {
                         </div>
                     </div>
                     <div className="flex flex-row gap-2 border-t pt-2">
-                        <Button variant={"outline"}>
+                        <Button variant={"indigo"}>
                             <Loader className="animate-spin" /> Analize my draw
                         </Button>
                         <Button variant="indigo">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useOpenAIKey() {
   const [apiKey, setApiKey] = useState<string | null>(null);
@@ -7,8 +7,8 @@ export function useOpenAIKey() {
   useEffect(() => {
     const loadApiKey = async () => {
       try {
-        const storedKey = localStorage.getItem('openai_api_key');
-        setApiKey(storedKey || '');
+        const storedKey = localStorage.getItem("openai_api_key");
+        setApiKey(storedKey || "");
       } finally {
         setIsLoading(false);
       }
@@ -18,13 +18,13 @@ export function useOpenAIKey() {
   }, []);
 
   const saveApiKey = (key: string) => {
-    localStorage.setItem('openai_api_key', key);
+    localStorage.setItem("openai_api_key", key);
     setApiKey(key);
   };
 
   const removeApiKey = () => {
-    localStorage.removeItem('openai_api_key');
-    setApiKey('');
+    localStorage.removeItem("openai_api_key");
+    setApiKey("");
   };
 
   return { apiKey, isLoading, saveApiKey, removeApiKey };

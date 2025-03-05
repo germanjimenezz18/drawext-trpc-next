@@ -8,7 +8,7 @@ import {
 
 import { ApiKeyForm } from "@/components/api-key-form";
 import { useOpenAIKey } from "@/hooks/useOpenAIKey";
-import { useDrawingEditor } from "@/hooks/useDrawingEditor";
+import { useDrawingEditor } from "@/hooks/useEditorStore";
 
 import { Button } from "@/components/ui/button";
 import { GlassesIcon, Settings } from "lucide-react";
@@ -93,11 +93,11 @@ export function Chat() {
           </div>
           <div className="flex flex-row gap-2 border-t pt-2">
             <Button
-              variant="indigo"
+              variant="indigo" 
               onClick={handleAnalyze}
               disabled={!apiKey || mutation.isLoading}
             >
-              <GlassesIcon />
+              <GlassesIcon  />
               {mutation.isLoading ? "Analyzing..." : "Analyze my draw"}
             </Button>
 

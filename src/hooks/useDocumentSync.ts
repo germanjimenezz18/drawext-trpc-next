@@ -1,10 +1,21 @@
 import { Editor, getSnapshot, loadSnapshot } from "tldraw";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
+import { useCallback } from "react";
 
 export const useDocumentSync = () => {
   const { mutateAsync: saveDocument } = trpc.saveDocument.useMutation();
-  const { data, refetch } = trpc.getDocument.useQuery();
+  const { data, isLoading, refetch, isError } = trpc.getDocument.useQuery(
+    undefined,
+    {
+      enabled: false,
+      staleTime: 1000 * 60, // 5 minutos
+      onError: (error) => {
+        console.error("Error fetching document:", error);
+        toast.error("Error retrieving document");
+      },
+    }
+  );
 
   const handleDocumentChange = (editor: Editor) => {
     try {
@@ -12,30 +23,39 @@ export const useDocumentSync = () => {
 
       toast.promise(saveDocument({ document }), {
         loading: "Saving...",
-        success: "Saved",
-        error: "Failed to save",
+        success: "Document saved",
+        error: "Error saving",
       });
-    } catch {
-      toast.error("Save failed");
-    }
-  };
-
-  const handleLoadDocument = async (editor: Editor) => {
-    try {
-      await refetch();
-
-      if (data && data.document && data.document.content) {
-        const documentData = JSON.parse(data.document.content);
-        loadSnapshot(editor.store, documentData);
-        toast.success("Documento cargado");
-      } else {
-        toast.error("No se pudo cargar el documento");
-      }
     } catch (error) {
-      console.error("Error al cargar el documento:", error);
-      toast.error("Error al cargar el documento");
+      console.error("Error saving document:", error);
+      toast.error("Error saving");
     }
   };
 
-  return { handleDocumentChange, handleLoadDocument };
+  const handleLoadDocument = useCallback(
+    async (editor: Editor) => {
+
+      const result = await refetch();
+      if (result.data && result.data.document.content) {
+        try {
+          const documentData = JSON.parse(result.data.document.content);
+          loadSnapshot(editor.store, documentData);
+        } catch (parseError) {
+          console.error("Error parsing document:", parseError);
+          toast.error("Error processing document");
+        }
+      } else {
+        toast.info("No saved document");
+      }
+    },
+    [refetch]
+  );
+
+  return {
+    handleDocumentChange,
+    handleLoadDocument,
+    isLoading,
+    isError,
+    hasData: !!data,
+  };
 };

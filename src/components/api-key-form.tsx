@@ -1,7 +1,7 @@
 import { SetStateAction, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
+import { SaveAll } from 'lucide-react';
 interface ApiKeyFormProps {
   onSave: (key: string) => void;
 }
@@ -24,7 +24,7 @@ export function ApiKeyForm({ onSave }: ApiKeyFormProps) {
           value={key}
           onChange={(e: { target: { value: SetStateAction<string>; }; }) => setKey(e.target.value)}
         />
-        <Button onClick={() => onSave(key)}>Save</Button>
+        <Button variant={'indigo'} onClick={() => onSave(key)}> <SaveAll />Save</Button>
       </div>
     </div>
   );

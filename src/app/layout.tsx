@@ -1,6 +1,7 @@
 import "./globals.css";
 import { TRPCProvider } from "../providers/trpc-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { Navbar } from "@/components/navbar";
 
 export default function RootLayout({
   children,
@@ -9,14 +10,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="antialiased ">
         <Toaster
           position="top-right"
           richColors
           theme="light"
           toastOptions={{ duration: 2500 }}
         />
-        <TRPCProvider>{children}</TRPCProvider>
+        <TRPCProvider>
+          <div className="flex flex-col h-screen bg-gradient-to-br from-indigo-200  to-indigo-400">
+            <header className="flex w-full items-center py-2.5 px-10 bg-[#f9fafb] bg-white/30 border-[white]/20">
+              <Navbar />
+            </header>
+
+            {children}
+          </div>
+        </TRPCProvider>
       </body>
     </html>
   );

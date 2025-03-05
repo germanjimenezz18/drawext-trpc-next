@@ -2,18 +2,18 @@ import { Editor } from "tldraw";
 import { create } from "zustand";
 import { editorToB64Image } from "@/lib/utils";
 
-interface DrawingEditorStore {
+interface EditorStore {
   editor: Editor | null;
   setEditor: (editor: Editor | null) => void;
 }
 
-const useDrawingEditorStore = create<DrawingEditorStore>((set) => ({
+const useEditorStore = create<EditorStore>((set) => ({
   editor: null,
   setEditor: (editor) => set({ editor }),
 }));
 
 export const useDrawingEditor = () => {
-  const { editor, setEditor } = useDrawingEditorStore();
+  const { editor, setEditor } = useEditorStore();
 
   const getImage = async () => {
     if (!editor) return null;

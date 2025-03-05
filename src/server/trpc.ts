@@ -65,15 +65,31 @@ export const appRouter = router({
     }),
 
   getDocument: publicProcedure.query(async () => {
-    // TODO: read from DB
-    const data = fs.readFileSync("mock-db.json", "utf8");
-    await sleep(1500); // Simular latencia
-    return {
-      success: true,
-      document: {
-        content: data,
-      },
-    };
+    try {
+      // Verificar si el archivo existe antes de leerlo
+      if (!fs.existsSync("mock-db.json")) {
+        // Si no existe, retornamos un objeto vacío pero sin error
+        await sleep(500); // Simular latencia
+        return {
+          success: true,
+          document: {
+            content: JSON.stringify({}),
+          },
+        };
+      }
+      
+      const data = fs.readFileSync("mock-db.json", "utf8");
+      await sleep(500); // Reducir latencia simulada
+      return {
+        success: true,
+        document: {
+          content: data,
+        },
+      };
+    } catch (error) {
+      console.error("Error reading document:", error);
+      throw new Error("Failed to read document");
+    }
   }),
 });
 

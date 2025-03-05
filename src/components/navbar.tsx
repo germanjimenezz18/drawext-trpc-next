@@ -6,7 +6,7 @@ export function Navbar() {
     <div className="flex w-full items-center justify-between">
       <div className="flex items-center gap-6">
         <Link href="/" className="flex items-center gap-2">
-          <button className="group relative  rounded-lg border border-neutral-200 bg-gradient-to-r from-indigo-500 to-indigo-800 px-4 py-1 text-white">
+          <button className="group relative shadow-xl rounded-lg bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-1 text-white ">
             <span className="relative inline-flex overflow-hidden">
               <div className="translate-y-0 skew-y-0 transition duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-12">
                 DrawExt
@@ -18,18 +18,7 @@ export function Navbar() {
           </button>
         </Link>
         <nav className="hidden gap-6 md:flex">
-          <Link
-            href="/"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-          >
-            Canvas
-          </Link>
-          <Link
-            href="/gallery"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-          >
-            Gallery
-          </Link>
+          
           <Link
             href="/docs"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
